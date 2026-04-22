@@ -1,0 +1,71 @@
+services:
+  postgresql:
+    image: postgis/postgis:15-3.4
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./etl/sql:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  graphhopper:
+    build:
+      context: ./graphhopper
+      args:
+        GH_VERSION: "8.0"
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    environment:
+      DB_JDBC_URL: jdbc:postgresql://postgresql:5432/${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${GRAPHHOPPER_PORT:-8989}:8989"
+    volumes:
+      - ./etl/data/raw:/data/raw:ro
+      - ./graphhopper/config.yaml:/config/config.yaml:ro
+      - ./graphhopper/custom_models:/config/custom_models:ro
+      - ./runtime/graphhopper:/data/graph-cache
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8989/health >/dev/null"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 120s
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./poc
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      graphhopper:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      GH_BASE_URL: http://graphhopper:8989
+      BACKEND_PORT: 8080
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      GRAPHHOPPER_PORT: 8989
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

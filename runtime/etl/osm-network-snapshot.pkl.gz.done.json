@@ -1,0 +1,1 @@
+{"snapshot_path": "C:\\Users\\SSAFY\\ieumgil-poc-v0\\runtime\\etl\\osm-network-snapshot.pkl.gz", "build_stats": {"way_count": 56934, "anchor_count": 96169, "segment_count": 115080, "tagged_anchor_count": 3687, "degenerate_segment_count": 0}, "written_at": 1776826007.3311253}

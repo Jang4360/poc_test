@@ -1,0 +1,31 @@
+plugins {
+	id 'java-library'
+}
+
+group = 'com.ieumgil'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+	withSourcesJar()
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compileOnly 'com.graphhopper:graphhopper-core:8.0'
+	compileOnly 'org.slf4j:slf4j-api:2.0.17'
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.13.4'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+jar {
+	archiveBaseName = 'ieumgil-graphhopper-plugin'
+}

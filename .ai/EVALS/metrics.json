@@ -1,0 +1,13 @@
+{
+  "updated_at": "2026-04-22",
+  "first_pass_success_rate": null,
+  "retry_count": 2,
+  "test_pass_rate": null,
+  "missed_acceptance_criteria": 0,
+  "risk_carry_over_count": 0,
+  "repeated_failure_rate": 0.0,
+  "skill_reuse_rate": null,
+  "unresolved_blocker_count": 1,
+  "release_readiness_confidence": 0.24,
+  "harness_health_score": 80
+}

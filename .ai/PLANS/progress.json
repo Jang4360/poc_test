@@ -1,0 +1,57 @@
+{
+  "sprint_name": "busan-eumgil-mvp-plan",
+  "updated_at": "2026-04-22",
+  "summary": {
+    "planned": 6,
+    "completed": 2,
+    "in_progress": 0,
+    "blocked": 1,
+    "progress_percentage": 33.3,
+    "quality_adjusted_progress": 26.6,
+    "confidence_score": 0.7
+  },
+  "items": [
+    {
+      "id": "IEUM-PLAN-01",
+      "title": "구현 기반 정렬",
+      "status": "completed",
+      "stage": "Plan",
+      "verification": "01-setup-and-repo-alignment.md 기준으로 DB, 구조, V2 경계 확정"
+    },
+    {
+      "id": "IEUM-PLAN-02",
+      "title": "OSM 선적재와 보행 네트워크 생성",
+      "status": "completed",
+      "stage": "Build",
+      "verification": "4-column natural key validated on 2026-04-22; parse-only exits cleanly and load-snapshot --truncate loads 96,169 road_nodes plus 115,080 road_segments with 0 invalid geometries"
+    },
+    {
+      "id": "IEUM-PLAN-03",
+      "title": "CSV 및 BIMS 기반 보강 ETL",
+      "status": "blocked",
+      "stage": "Build",
+      "verification": "2026-04-22 rerun validated places, accessibility features, segment enrichment, subway elevators, and a non-hanging BIMS load; blocked because current BIMS busInfo payload yields 290 routes but no reliable low-floor indicator, so hasLowFloor remains false for every row"
+    },
+    {
+      "id": "IEUM-PLAN-04",
+      "title": "GraphHopper 분기 프로필 구성",
+      "status": "pending",
+      "stage": "Build",
+      "verification": "04-graphhopper-routing-profiles.md 기준으로 encoded value와 4개 custom model 구성"
+    },
+    {
+      "id": "IEUM-PLAN-05",
+      "title": "Spring Boot API와 대중교통 오케스트레이션",
+      "status": "pending",
+      "stage": "Build",
+      "verification": "05-backend-api-and-orchestration.md 기준으로 핵심 API와 필터링 로직 구성"
+    },
+    {
+      "id": "IEUM-PLAN-06",
+      "title": "검증 시연과 V2 경계 정리",
+      "status": "pending",
+      "stage": "Test",
+      "verification": "06-validation-demo-and-v2-boundary.md 기준으로 smoke와 시연 범위 정리"
+    }
+  ]
+}

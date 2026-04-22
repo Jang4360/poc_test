@@ -1,0 +1,29 @@
+graphhopper:
+  datareader.file: /data/raw/busan.osm.pbf
+  graph.location: /data/graph-cache
+  custom_models.directory: /config/custom_models
+  profiles:
+    - name: visual_safe
+      custom_model_files: [foot.json, visual_safe.json]
+    - name: visual_fast
+      custom_model_files: [foot.json, visual_fast.json]
+    - name: wheelchair_safe
+      custom_model_files: [foot.json, wheelchair_safe.json]
+    - name: wheelchair_fast
+      custom_model_files: [foot.json, wheelchair_fast.json]
+  profiles_ch: []
+  profiles_lm:
+    - profile: visual_safe
+    - profile: visual_fast
+    - profile: wheelchair_safe
+    - profile: wheelchair_fast
+  prepare.lm.landmarks: 8
+  import.osm.ignored_highways: motorway,trunk
+
+server:
+  application_connectors:
+    - type: http
+      port: 8989
+  admin_connectors:
+    - type: http
+      port: 8990

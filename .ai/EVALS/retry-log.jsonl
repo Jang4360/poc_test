@@ -1,0 +1,3 @@
+{"timestamp":"2026-04-19T00:00:00Z","signature":"placeholder","outcome":"seed","note":"replace with real retry events"}
+{"timestamp": "2026-04-22T04:23:01.237087Z", "signature": "03-segment-features-load-timeout", "outcome": "failed"}
+{"timestamp": "2026-04-22T04:46:05.881847Z", "signature": "03-segment-features-crossing-cast", "outcome": "failed"}

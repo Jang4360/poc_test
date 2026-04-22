@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: ieumgil-backend
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:${POSTGRES_PORT:5432}/${POSTGRES_DB:ieumgil}}
+    username: ${SPRING_DATASOURCE_USERNAME:${POSTGRES_USER:ieumgil}}
+    password: ${SPRING_DATASOURCE_PASSWORD:${POSTGRES_PASSWORD:ieumgil}}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+server:
+  port: ${BACKEND_PORT:8080}
+graphhopper:
+  base-url: ${GH_BASE_URL:http://localhost:${GRAPHHOPPER_PORT:8989}}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

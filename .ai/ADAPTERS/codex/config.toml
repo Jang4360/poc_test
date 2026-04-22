@@ -1,0 +1,5 @@
+# Generated from .ai/ADAPTERS/codex/config.toml
+# Keep repo-local Codex configuration conservative until the project needs more.
+
+# Optional fallback example:
+# project_doc_fallback_filenames = ["CLAUDE.md"]

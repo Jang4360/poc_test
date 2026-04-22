@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Repository Dashboard</title>
+<style>
+:root { --bg:#f5f2ea; --panel:#fff; --ink:#1f241d; --muted:#697567; --line:#dde4d8; --accent:#1d5b38; --accent-2:#dceadf; --warn:#b9772f; --danger:#b6553e; }
+* { box-sizing:border-box; }
+body { margin:0; font-family:"Segoe UI", "Noto Sans KR", sans-serif; color:var(--ink); background:radial-gradient(circle at top left,#dfeedd,transparent 28%), linear-gradient(180deg,#fbfaf7, var(--bg)); }
+main { width:min(1240px, calc(100vw - 32px)); margin:20px auto 32px; display:grid; gap:16px; }
+.panel { background:var(--panel); border:1px solid var(--line); border-radius:24px; box-shadow:0 16px 40px rgba(31,36,29,.06); }
+.hero { padding:24px 26px; }
+.hero h1 { margin:0; font-size:40px; line-height:1; }
+.hero .goal { margin-top:10px; color:var(--muted); line-height:1.5; max-width:72ch; }
+.grid4, .grid2, .gridWide { display:grid; gap:14px; }
+.grid4 { grid-template-columns:repeat(4,minmax(0,1fr)); margin-top:18px; }
+.grid2 { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.gridWide { grid-template-columns:1.15fr .85fr; }
+.metric { border:1px solid var(--line); border-radius:18px; padding:16px; background:#f4f7f2; }
+.metric.accent { background:linear-gradient(180deg,#296e45,#18442b); color:#fff; border-color:transparent; }
+.metric .label { font-size:13px; color:var(--muted); margin-bottom:12px; }
+.metric.accent .label { color:rgba(255,255,255,.72); }
+.metric .value { font-size:34px; font-weight:700; line-height:1; }
+.body { padding:20px 22px; }
+h2 { margin:0 0 14px; font-size:18px; }
+ul.clean { list-style:none; padding:0; margin:0; display:grid; gap:10px; }
+.item { display:grid; grid-template-columns:24px 1fr; gap:10px; align-items:start; padding:12px 14px; border:1px solid var(--line); border-radius:16px; background:#f4f7f2; }
+.item.done { background:#eef8ef; } .item.doing { background:#eef4ff; } .item.failed { background:#fff1ed; }
+.icon { width:24px; height:24px; display:grid; place-items:center; border-radius:999px; background:#e1e8de; font-weight:700; }
+.ws, .action { display:grid; gap:12px; align-items:center; border:1px solid var(--line); border-radius:16px; padding:14px 16px; background:#f8faf7; }
+.ws { grid-template-columns:1fr auto; }
+.action { grid-template-columns:44px 1fr auto; }
+.badge, .pill { padding:6px 10px; border-radius:999px; background:var(--accent-2); color:var(--accent); font-size:12px; font-weight:600; white-space:nowrap; }
+.index { width:44px; height:44px; display:grid; place-items:center; border-radius:12px; background:var(--accent); color:#fff; font-weight:700; }
+.risk { border:1px solid var(--line); border-left:4px solid var(--warn); border-radius:16px; padding:14px 16px; background:#fbfaf7; }
+.risk.danger { border-left-color:var(--danger); }
+.muted { color:var(--muted); font-size:13px; line-height:1.45; margin-top:4px; }
+.empty { color:var(--muted); padding:8px 0; line-height:1.5; }
+.warnbox { padding-left:18px; color:var(--muted); }
+.gaugewrap { display:grid; grid-template-columns:190px 1fr; gap:18px; align-items:center; }
+.gauge { width:180px; aspect-ratio:1; border-radius:50%; display:grid; place-items:center; background:radial-gradient(circle,#fff 0 56%, transparent 57%), conic-gradient(var(--accent) 0deg 82deg,#dfe6dd 0deg 360deg); }
+.gauge strong { font-size:38px; }
+.mini { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+.mini .metric .value { font-size:26px; }
+@media (max-width: 1000px) { .grid4, .grid2, .gridWide { grid-template-columns:1fr; } }
+@media (max-width: 700px) { .action { grid-template-columns:44px 1fr; } .pill { grid-column:2; justify-self:start; } .gaugewrap { grid-template-columns:1fr; } .mini { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <section class='panel hero'>
+    <h1>Repository Dashboard</h1>
+    <div class='goal'>Sprint: <strong>busan-eumgil-mvp-plan</strong><br>최신 `docs/prd.md`, `docs/기능명세서.md`, `docs/erd.md`와 현재 저장소 상태만으로 부산이음길 MVP POC를 구현 가능한 수준의 실행 계획으로 정리한다. 이번 스프린트는 `docs/plans/` 없이도 진행 가능해야 하며, `busan.osm.pbf`를 먼저 DB에 적재하고 `etl/data/raw`의 CSV와 BIMS API를 통해 접근성·시설·대중교통 참조 데이터를 보강한 뒤, 그 결과를 GraphHopper와 Spring Boot API에 연결하는 순서로 진행한다.<br>Updated: 2026-04-22</div>
+    <section class='grid4'><article class='metric accent'><div class='label'>Success Criteria</div><div class='value'>1 / 7</div></article><article class='metric neutral'><div class='label'>Workstreams</div><div class='value'>1 / 7</div></article><article class='metric neutral'><div class='label'>Stage Checklist</div><div class='value'>5 / 22</div></article><article class='metric neutral'><div class='label'>Harness Health</div><div class='value'>100</div></article></section>
+  </section>
+  <section class='grid2'>
+    <section class='panel body'><h2>Success Criteria</h2><ul class='clean'><li class='item todo'><span class='icon'> </span><span>`docs/plans/` 없이도 어떤 순서로 구현할지 `.ai/PLANS`만 보고 따라갈 수 있다.</span></li><li class='item done'><span class='icon'>x</span><span>`docs/plans/` 없이도 어떤 순서로 구현할지 `.ai/PLANS`만 보고 따라갈 수 있다.</span></li><li class='item todo'><span class='icon'> </span><span>OSM 선적재 후 CSV/BIMS 기반 보강 적재 순서와 책임 테이블이 명확하다.</span></li><li class='item todo'><span class='icon'> </span><span>`etl/data/raw` 각 파일이 어떤 테이블과 컬럼을 채우는지, 그리고 point/polygon이 기존 `road_segments.geom`에 어떻게 매칭되는지 계획에 명시되어 있다.</span></li><li class='item todo'><span class='icon'> </span><span>GraphHopper import 시 custom encoded value와 4개 custom model을 추가하는 구현 방향이 정리되어 있다.</span></li><li class='item todo'><span class='icon'> </span><span>데이터셋이 아직 완전하지 않은 POC 상태를 고려한 유연한 기준과, 원래 엄격한 기준을 주석으로 유지하는 전략이 반영되어 있다.</span></li><li class='item todo'><span class='icon'> </span><span>현재 `poc/` 기반 Spring Boot 구조에서 구현해야 할 API와 검증 흐름이 단계화되어 있다.</span></li></ul></section>
+    <section class='panel body'><h2>Workstream Index</h2><div class='ws todo'><div><strong>01-setup-and-repo-alignment</strong><div class='muted'></div></div><span class='badge'>Todo</span></div><div class='ws done'><div><strong>01-setup-and-repo-alignment</strong><div class='muted'></div></div><span class='badge'>Done</span></div><div class='ws todo'><div><strong>02-osm-schema-and-network-load</strong><div class='muted'></div></div><span class='badge'>Todo</span></div><div class='ws todo'><div><strong>03-csv-etl-and-reference-data</strong><div class='muted'></div></div><span class='badge'>Todo</span></div><div class='ws todo'><div><strong>04-graphhopper-routing-profiles</strong><div class='muted'></div></div><span class='badge'>Todo</span></div><div class='ws todo'><div><strong>05-backend-api-and-orchestration</strong><div class='muted'></div></div><span class='badge'>Todo</span></div><div class='ws todo'><div><strong>06-validation-demo-and-v2-boundary</strong><div class='muted'></div></div><span class='badge'>Todo</span></div></section>
+  </section>
+  <section class='gridWide'>
+    <section class='panel body'>
+      <h2>Stage Progress</h2>
+      <div class='gaugewrap'>
+        <div class='gauge'><div><strong>22.7%</strong><div class='muted'>completed</div></div></div>
+        <div class='mini'>
+          <article class='metric neutral'><div class='label'>Started</div><div class='value'>5</div></article>
+          <article class='metric neutral'><div class='label'>Todo</div><div class='value'>17</div></article>
+          <article class='metric neutral'><div class='label'>Blocked</div><div class='value'>0</div></article>
+        </div>
+      </div>
+    </section>
+    <section class='panel body'><h2>Risks</h2><ul class='clean'></ul><div class='empty'>No active risks from the current artifacts.</div></section>
+  </section>
+  <section class='grid2'>
+    <section class='panel body'><h2>Next Actions</h2><div class='action'><div class='index'>01</div><div><strong>Start next item: MVP POC의 핵심은 `경로 탐색`, `시설 조회`, `익명 제보`, `접근성 데이터 적재`로 고정한다.</strong><div class='muted'>Begin the next Think task.</div></div><span class='pill'>office-hours</span></div><div class='action'><div class='index'>02</div><div><strong>Start next item: 운영 자동화와 완전한 계정 기능은 V2로 분리한다.</strong><div class='muted'>Begin the next Think task.</div></div><span class='pill'>office-hours</span></div><div class='action'><div class='index'>03</div><div><strong>Start next item: 데이터 부족 상태에서는 유연한 POC 기준을 적용하고, 원래 엄격 기준은 주석으로 남기는 전략을 확정한다.</strong><div class='muted'>Begin the next Plan task.</div></div><span class='pill'>autoplan</span></div></section>
+    <section class='panel body'><h2>Health Signals</h2><section class='grid4' style='grid-template-columns:repeat(3,minmax(0,1fr));'><article class='metric neutral'><div class='label'>Success Rate</div><div class='value'>22.7%</div></article><article class='metric neutral'><div class='label'>Failure Rate</div><div class='value'>0.0%</div></article><article class='metric neutral'><div class='label'>Retry Count</div><div class='value'>0</div></article></section><h2 style='margin-top:18px;'>Warnings</h2><ul class='warnbox'><li>Release runbook is still placeholder</li><li>Rollback runbook is still placeholder</li></ul></section>
+  </section>
+</main>
+</body>
+</html>

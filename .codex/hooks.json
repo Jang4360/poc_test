@@ -1,0 +1,15 @@
+{
+  "_comment": "Generated from .ai/ADAPTERS/codex/hooks.json. Codex uses AGENTS.md and .agents/skills as the primary enforcement surface. This file provides a minimal SessionStart reminder only; do not rely on it for tool-level blocking.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ./scripts/codex-hook-session-start.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
