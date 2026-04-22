@@ -3,12 +3,12 @@
   "updated_at": "2026-04-22",
   "summary": {
     "planned": 6,
-    "completed": 2,
-    "in_progress": 0,
-    "blocked": 1,
-    "progress_percentage": 33.3,
-    "quality_adjusted_progress": 26.6,
-    "confidence_score": 0.7
+    "completed": 1,
+    "in_progress": 2,
+    "blocked": 0,
+    "progress_percentage": 25.0,
+    "quality_adjusted_progress": 22.5,
+    "confidence_score": 0.9
   },
   "items": [
     {
@@ -21,16 +21,16 @@
     {
       "id": "IEUM-PLAN-02",
       "title": "OSM 선적재와 보행 네트워크 생성",
-      "status": "completed",
+      "status": "in_progress",
       "stage": "Build",
-      "verification": "4-column natural key validated on 2026-04-22; parse-only exits cleanly and load-snapshot --truncate loads 96,169 road_nodes plus 115,080 road_segments with 0 invalid geometries"
+      "verification": "2026-04-23 source strategy changed from busan.osm.pbf to N3L_A0020000_26 SHP; local simulation confirms 248,425 line features in EPSG:5179 and 12,140 lines in the Jangsan 5km bbox, but schema and loader redesign are still pending"
     },
     {
       "id": "IEUM-PLAN-03",
       "title": "CSV 및 BIMS 기반 보강 ETL",
-      "status": "blocked",
+      "status": "in_progress",
       "stage": "Build",
-      "verification": "2026-04-22 rerun validated places, accessibility features, segment enrichment, subway elevators, and a non-hanging BIMS load; blocked because current BIMS busInfo payload yields 290 routes but no reliable low-floor indicator, so hasLowFloor remains false for every row"
+      "verification": "2026-04-22 canonical schema DB reload completed: places=13,564, place_accessibility_features=42,368, segment_features=120,357, subway_station_elevators=203, low_floor_bus_routes=146 with hasLowFloor=true for 118 rows; remaining work is ETL hardening for 15m~30m matching and audio NO propagation"
     },
     {
       "id": "IEUM-PLAN-04",

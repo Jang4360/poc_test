@@ -14,6 +14,9 @@ from etl.scripts._shared import build_parser, csv_dict_reader, is_blank, print_s
 DEFAULT_AUDIO_CSV = ROOT_DIR / "etl" / "data" / "raw" / "stg_audio_signals_ready.csv"
 DEFAULT_CROSSWALK_CSV = ROOT_DIR / "etl" / "data" / "raw" / "stg_crosswalks_ready.csv"
 DEFAULT_SLOPE_CSV = ROOT_DIR / "etl" / "data" / "raw" / "slope_analysis_staging.csv"
+DEFAULT_ELEVATOR_CSV = ROOT_DIR / "etl" / "data" / "raw" / "subway_station_elevators_erd_ready.csv"
+DEFAULT_MAX_DISTANCE_METERS = 15.0
+DEFAULT_REVIEW_DISTANCE_METERS = 30.0
 
 
 def parse_numeric(value: object) -> float | None:
@@ -73,6 +76,24 @@ def normalize_slope_row(row: dict[str, str], index: int) -> tuple[str, str, floa
     )
 
 
+def normalize_elevator_row(row: dict[str, str]) -> tuple[str, str] | None:
+    elevator_id = str(row.get("elevatorId", "")).strip()
+    point_wkt = str(row.get("point", "")).strip()
+    if not elevator_id or not is_point_wkt(point_wkt):
+        return None
+    return f"elevator:{elevator_id}", point_wkt
+
+
+def classify_distance_band(distance_m: float | None, max_distance_m: float, review_distance_m: float) -> str:
+    if distance_m is None:
+        return "UNMATCHED"
+    if distance_m <= max_distance_m:
+        return "AUTO_UPDATE"
+    if distance_m <= review_distance_m:
+        return "REVIEW_REQUIRED"
+    return "UNMATCHED"
+
+
 def load_audio_rows(csv_path: Path) -> tuple[list[tuple[str, str, str, bool]], int]:
     rows: list[tuple[str, str, str, bool]] = []
     skipped = 0
@@ -109,6 +130,18 @@ def load_slope_rows(csv_path: Path) -> tuple[list[tuple[str, str, float | None, 
     return rows, skipped
 
 
+def load_elevator_rows(csv_path: Path) -> tuple[list[tuple[str, str]], int]:
+    rows: list[tuple[str, str]] = []
+    skipped = 0
+    for raw in csv_dict_reader(csv_path):
+        normalized = normalize_elevator_row(raw)
+        if normalized is None:
+            skipped += 1
+            continue
+        rows.append(normalized)
+    return rows, skipped
+
+
 def bulk_insert_values(cursor, sql: str, rows: list[tuple], template: str, page_size: int = 1000) -> None:
     from psycopg2.extras import execute_values
 
@@ -130,13 +163,14 @@ def reset_segment_enrichment(cursor) -> None:
         SET "audioSignalState" = 'UNKNOWN',
             "crossingState" = 'UNKNOWN',
             "avgSlopePercent" = NULL,
-            "widthMeter" = NULL
+            "widthMeter" = NULL,
+            "elevatorState" = 'UNKNOWN'
         """
     )
     cursor.execute(
         """
         DELETE FROM segment_features
-        WHERE "featureType" IN ('AUDIO_SIGNAL', 'CROSSWALK', 'SLOPE_ANALYSIS')
+        WHERE "featureType" IN ('AUDIO_SIGNAL', 'CROSSWALK', 'SLOPE_ANALYSIS', 'SUBWAY_ELEVATOR')
         """
     )
 
@@ -443,6 +477,133 @@ def load_slope_features(cursor, rows: list[tuple[str, str, float | None, float |
     }
 
 
+def load_elevator_features(
+    cursor,
+    rows: list[tuple[str, str]],
+    max_distance_m: float,
+    review_distance_m: float,
+) -> dict[str, int]:
+    review_distance_deg = meters_to_degrees(review_distance_m)
+    cursor.execute(
+        """
+        CREATE TEMP TABLE tmp_subway_elevators (
+            source_id TEXT PRIMARY KEY,
+            geom geometry(POINT, 4326) NOT NULL
+        ) ON COMMIT DROP
+        """
+    )
+    bulk_insert_values(
+        cursor,
+        "INSERT INTO tmp_subway_elevators (source_id, geom) VALUES %s",
+        rows,
+        template="(%s, ST_GeomFromText(%s, 4326))",
+    )
+    cursor.execute(
+        """
+        CREATE TEMP TABLE tmp_elevator_decisions ON COMMIT DROP AS
+        WITH candidates AS (
+            SELECT
+                src.source_id,
+                src.geom,
+                seg."edgeId" AS edge_id,
+                seg."lengthMeter" AS length_meter,
+                ST_Distance(seg."geom"::geography, src.geom::geography) AS distance_m,
+                ROW_NUMBER() OVER (
+                    PARTITION BY src.source_id
+                    ORDER BY
+                        ST_Distance(seg."geom"::geography, src.geom::geography),
+                        seg."lengthMeter",
+                        seg."edgeId"
+                ) AS rank_no,
+                COUNT(*) OVER (PARTITION BY src.source_id) AS candidate_count
+            FROM tmp_subway_elevators src
+            JOIN road_segments seg
+              ON seg."geom" && ST_Expand(src.geom, %s)
+             AND ST_DWithin(seg."geom", src.geom, %s)
+             AND ST_DWithin(seg."geom"::geography, src.geom::geography, %s)
+        )
+        SELECT
+            src.source_id,
+            src.geom,
+            cand.edge_id,
+            cand.distance_m,
+            COALESCE(cand.candidate_count, 0) AS candidate_count
+        FROM tmp_subway_elevators src
+        LEFT JOIN candidates cand
+          ON cand.source_id = src.source_id
+         AND cand.rank_no = 1
+        """,
+        (review_distance_deg, review_distance_deg, review_distance_m),
+    )
+    cursor.execute(
+        """
+        ALTER TABLE tmp_elevator_decisions
+        ADD COLUMN match_band TEXT
+        """
+    )
+    cursor.execute(
+        """
+        UPDATE tmp_elevator_decisions
+        SET match_band = CASE
+            WHEN edge_id IS NULL THEN 'UNMATCHED'
+            WHEN distance_m <= %s THEN 'AUTO_UPDATE'
+            WHEN distance_m <= %s THEN 'REVIEW_REQUIRED'
+            ELSE 'UNMATCHED'
+        END
+        """,
+        (max_distance_m, review_distance_m),
+    )
+    cursor.execute(
+        """
+        SELECT
+            (SELECT COUNT(*) FROM tmp_subway_elevators),
+            (SELECT COUNT(*) FROM tmp_elevator_decisions WHERE match_band = 'AUTO_UPDATE'),
+            (SELECT COUNT(*) FROM tmp_elevator_decisions WHERE match_band = 'REVIEW_REQUIRED'),
+            (SELECT COUNT(*) FROM tmp_elevator_decisions WHERE match_band = 'UNMATCHED'),
+            (
+                SELECT COUNT(*)
+                FROM (
+                    SELECT source_id
+                    FROM tmp_elevator_decisions
+                    WHERE candidate_count > 1
+                    GROUP BY source_id
+                ) collisions
+            )
+        """
+    )
+    source_count, matched_count, review_required_count, unmatched_count, multi_candidate_count = cursor.fetchone()
+    cursor.execute(
+        """
+        UPDATE road_segments seg
+        SET "elevatorState" = 'YES'
+        FROM (
+            SELECT DISTINCT edge_id
+            FROM tmp_elevator_decisions
+            WHERE match_band = 'AUTO_UPDATE'
+        ) updates
+        WHERE seg."edgeId" = updates.edge_id
+        """
+    )
+    cursor.execute(
+        """
+        INSERT INTO segment_features ("edgeId", "featureType", "geom")
+        SELECT
+            edge_id,
+            'SUBWAY_ELEVATOR',
+            geom
+        FROM tmp_elevator_decisions
+        WHERE match_band = 'AUTO_UPDATE'
+        """
+    )
+    return {
+        "source_count": int(source_count),
+        "matched_count": int(matched_count),
+        "review_required_count": int(review_required_count),
+        "unmatched_count": int(unmatched_count),
+        "multi_candidate_count": int(multi_candidate_count),
+    }
+
+
 def validation_stats(cursor) -> dict[str, int]:
     stats: dict[str, int] = {}
     cursor.execute('SELECT COUNT(*) FROM segment_features WHERE "featureType" = %s', ("AUDIO_SIGNAL",))
@@ -451,39 +612,55 @@ def validation_stats(cursor) -> dict[str, int]:
     stats["crosswalk_features"] = int(cursor.fetchone()[0])
     cursor.execute('SELECT COUNT(*) FROM segment_features WHERE "featureType" = %s', ("SLOPE_ANALYSIS",))
     stats["slope_features"] = int(cursor.fetchone()[0])
+    cursor.execute('SELECT COUNT(*) FROM segment_features WHERE "featureType" = %s', ("SUBWAY_ELEVATOR",))
+    stats["subway_elevator_features"] = int(cursor.fetchone()[0])
     cursor.execute('SELECT COUNT(*) FROM road_segments WHERE "audioSignalState" = %s', ("YES",))
     stats["audio_segments_yes"] = int(cursor.fetchone()[0])
     cursor.execute('SELECT COUNT(*) FROM road_segments WHERE "crossingState" != %s', ("UNKNOWN",))
     stats["crossing_segments_tagged"] = int(cursor.fetchone()[0])
     cursor.execute('SELECT COUNT(*) FROM road_segments WHERE "avgSlopePercent" IS NOT NULL')
     stats["slope_segments_tagged"] = int(cursor.fetchone()[0])
+    cursor.execute('SELECT COUNT(*) FROM road_segments WHERE "widthMeter" IS NOT NULL')
+    stats["width_segments_tagged"] = int(cursor.fetchone()[0])
+    cursor.execute('SELECT COUNT(*) FROM road_segments WHERE "elevatorState" = %s', ("YES",))
+    stats["elevator_segments_tagged"] = int(cursor.fetchone()[0])
     return stats
 
 
 def main() -> int:
-    parser = build_parser("Load crosswalk, audio signal, and slope features against road_segments.")
+    parser = build_parser("Load crosswalk, audio signal, slope, and subway elevator features against road_segments.")
     parser.add_argument("--audio-csv", type=Path, default=DEFAULT_AUDIO_CSV, help="Path to the audio signal CSV.")
     parser.add_argument("--crosswalk-csv", type=Path, default=DEFAULT_CROSSWALK_CSV, help="Path to the crosswalk CSV.")
     parser.add_argument("--slope-csv", type=Path, default=DEFAULT_SLOPE_CSV, help="Path to the slope polygon CSV.")
+    parser.add_argument("--elevator-csv", type=Path, default=DEFAULT_ELEVATOR_CSV, help="Path to the subway elevator CSV.")
     parser.add_argument(
         "--max-distance-meters",
         type=float,
-        default=15.0,
+        default=DEFAULT_MAX_DISTANCE_METERS,
         help="Maximum distance in meters for point-to-segment matching.",
     )
+    parser.add_argument(
+        "--review-distance-meters",
+        type=float,
+        default=DEFAULT_REVIEW_DISTANCE_METERS,
+        help="Maximum distance in meters for review-required point-to-segment matching.",
+    )
     args = parser.parse_args()
+    if args.review_distance_meters < args.max_distance_meters:
+        parser.error("--review-distance-meters must be greater than or equal to --max-distance-meters")
 
     print_stage_banner(
         "04_segment_features_load.py",
-        "stg_crosswalks_ready.csv + stg_audio_signals_ready.csv + slope_analysis_staging.csv",
+        "stg_crosswalks_ready.csv + stg_audio_signals_ready.csv + slope_analysis_staging.csv + subway_station_elevators_erd_ready.csv",
     )
-    for path in (args.audio_csv, args.crosswalk_csv, args.slope_csv):
+    for path in (args.audio_csv, args.crosswalk_csv, args.slope_csv, args.elevator_csv):
         if not path.exists():
             parser.error(f"Input file does not exist: {path}")
 
     audio_rows, audio_skipped = load_audio_rows(args.audio_csv)
     crosswalk_rows, crosswalk_skipped = load_crosswalk_rows(args.crosswalk_csv)
     slope_rows, slope_skipped = load_slope_rows(args.slope_csv)
+    elevator_rows, elevator_skipped = load_elevator_rows(args.elevator_csv)
     print_summary(
         [
             ("audio_rows_valid", len(audio_rows)),
@@ -492,7 +669,10 @@ def main() -> int:
             ("crosswalk_rows_skipped", crosswalk_skipped),
             ("slope_rows_valid", len(slope_rows)),
             ("slope_rows_skipped", slope_skipped),
+            ("elevator_rows_valid", len(elevator_rows)),
+            ("elevator_rows_skipped", elevator_skipped),
             ("max_distance_meters", args.max_distance_meters),
+            ("review_distance_meters", args.review_distance_meters),
         ]
     )
     if args.dry_run:
@@ -506,6 +686,12 @@ def main() -> int:
             audio_stats = load_audio_features(cursor, audio_rows, args.max_distance_meters)
             crosswalk_stats = load_crosswalk_features(cursor, crosswalk_rows, args.max_distance_meters)
             slope_stats = load_slope_features(cursor, slope_rows)
+            elevator_stats = load_elevator_features(
+                cursor,
+                elevator_rows,
+                args.max_distance_meters,
+                args.review_distance_meters,
+            )
             stats = validation_stats(cursor)
         connection.commit()
 
@@ -515,6 +701,8 @@ def main() -> int:
     print_summary(crosswalk_stats.items())
     print("- slope_match_stats:")
     print_summary(slope_stats.items())
+    print("- elevator_match_stats:")
+    print_summary(elevator_stats.items())
     print("- validation_stats:")
     print_summary(stats.items())
     print("- status: road_segments and segment_features enrichment complete")

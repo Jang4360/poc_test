@@ -7,7 +7,7 @@
   "risk_carry_over_count": 0,
   "repeated_failure_rate": 0.0,
   "skill_reuse_rate": null,
-  "unresolved_blocker_count": 1,
+  "unresolved_blocker_count": 0,
   "release_readiness_confidence": 0.24,
-  "harness_health_score": 80
+  "harness_health_score": 90
 }

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -85,6 +86,23 @@ class ReferenceLoadTests(unittest.TestCase):
             ("slope:3", "MULTIPOLYGON(((129.0 35.0,129.1 35.0,129.1 35.1,129.0 35.0)))", 4.5, 2.0),
         )
 
+    def test_normalize_elevator_row_requires_point(self) -> None:
+        row = {
+            "elevatorId": "17",
+            "point": "POINT(129.1 35.1)",
+        }
+        self.assertEqual(
+            SEGMENTS.normalize_elevator_row(row),
+            ("elevator:17", "POINT(129.1 35.1)"),
+        )
+        self.assertIsNone(SEGMENTS.normalize_elevator_row({"elevatorId": "18", "point": ""}))
+
+    def test_classify_distance_band_matches_plan_thresholds(self) -> None:
+        self.assertEqual(SEGMENTS.classify_distance_band(10.0, 15.0, 30.0), "AUTO_UPDATE")
+        self.assertEqual(SEGMENTS.classify_distance_band(22.0, 15.0, 30.0), "REVIEW_REQUIRED")
+        self.assertEqual(SEGMENTS.classify_distance_band(31.0, 15.0, 30.0), "UNMATCHED")
+        self.assertEqual(SEGMENTS.classify_distance_band(None, 15.0, 30.0), "UNMATCHED")
+
     def test_dedupe_elevator_rows_keeps_lowest_elevator_id(self) -> None:
         rows = [
             (2, "134", "노포", "1", "2", "POINT(1 2)"),
@@ -96,15 +114,126 @@ class ReferenceLoadTests(unittest.TestCase):
         self.assertEqual(len(deduped), 2)
         self.assertIn((1, "134", "노포", "1", "2", "POINT(1 2)"), deduped)
 
-    def test_extract_route_row_supports_common_bims_field_names(self) -> None:
-        item = {"lineid": "5200000086", "buslinenum": "86", "lowplate": "1"}
-        self.assertEqual(BUS.extract_route_row(item), ("5200000086", "86", True))
-        bustype_item = {"lineid": "5200179000", "buslinenum": "179", "bustype": "저상버스"}
-        self.assertEqual(BUS.extract_route_row(bustype_item), ("5200179000", "179", True))
+    def test_extract_catalog_route_identity_supports_common_bims_field_names(self) -> None:
+        item = {"lineid": "5200000086", "buslinenum": "86", "bustype": "일반버스"}
+        self.assertEqual(BUS.extract_catalog_route_identity(item), ("5200000086", "86"))
 
-    def test_normalize_route_rows_requires_low_floor_signal(self) -> None:
+    def test_normalize_exact_text_returns_empty_string_for_none(self) -> None:
+        self.assertEqual(BUS.normalize_exact_text(None), "")
+
+    def test_load_static_route_aggregates_groups_low_floor_by_route(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            csv_path = Path(tmpdir) / "routes.csv"
+            csv_path.write_bytes(
+                (
+                    "운수사,인가노선,차량번호,운행구분,상용구분,차량구분,연료,연식\r\n"
+                    "국제여객,10,부산70자1001,일반,상용,대형,CNG,2022\r\n"
+                    "국제여객,10,부산70자1004,저상,상용,대형,전기,2024\r\n"
+                    "화신여객,131,부산70자2001,일반,상용,대형,CNG,2020\r\n"
+                ).encode("cp949")
+            )
+            aggregates, source_row_count, skipped_rows = BUS.load_static_route_aggregates(csv_path)
+
+        self.assertEqual(source_row_count, 3)
+        self.assertEqual(skipped_rows, 0)
+        self.assertEqual(
+            aggregates,
+            {
+                "10": {"lowFloorVehicleCount": 1, "totalVehicleCount": 2},
+                "131": {"lowFloorVehicleCount": 0, "totalVehicleCount": 1},
+            },
+        )
+
+    def test_build_bims_route_catalog_rejects_conflicting_route_ids(self) -> None:
         with self.assertRaises(BUS.BimsLoadError):
-            BUS.normalize_route_rows([{"routeId": "1", "routeNo": "1"}])
+            BUS.build_bims_route_catalog(
+                [
+                    {"lineid": "5200000010", "buslinenum": "10"},
+                    {"lineid": "5200999999", "buslinenum": "10"},
+                ]
+            )
+
+    def test_build_bims_route_catalog_counts_true_duplicates(self) -> None:
+        catalog, duplicate_route_nos = BUS.build_bims_route_catalog(
+            [
+                {"lineid": "5200000010", "buslinenum": "10"},
+                {"lineid": "5200000010", "buslinenum": "10"},
+            ]
+        )
+        self.assertEqual(catalog, {"10": "5200000010"})
+        self.assertEqual(duplicate_route_nos, 1)
+
+    def test_load_elevator_rows_skips_invalid_points(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            csv_path = Path(tmpdir) / "elevators.csv"
+            csv_path.write_text(
+                "\n".join(
+                    [
+                        "elevatorId,stationId,stationName,lineName,entranceNo,point",
+                        "1,134,노포,1,2,POINT(129.09 35.28)",
+                        "2,133,범어사,1,4,",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            rows, skipped = SEGMENTS.load_elevator_rows(csv_path)
+
+        self.assertEqual(rows, [("elevator:1", "POINT(129.09 35.28)")])
+        self.assertEqual(skipped, 1)
+
+    def test_build_low_floor_rows_marks_unmatched_routes(self) -> None:
+        rows, report_routes, unmatched_count = BUS.build_low_floor_rows(
+            {
+                "10": {"lowFloorVehicleCount": 1, "totalVehicleCount": 2},
+                "131": {"lowFloorVehicleCount": 0, "totalVehicleCount": 1},
+            },
+            {"10": "5200000010"},
+        )
+
+        self.assertEqual(rows, [("5200000010", "10", True)])
+        self.assertEqual(unmatched_count, 1)
+        self.assertEqual(
+            next(route for route in report_routes if route["routeNo"] == "131")["unmatchedReason"],
+            "NO_BIMS_ROUTE_ID_MATCH",
+        )
+
+    def test_should_fail_on_unmatched_skips_failure_for_dry_run(self) -> None:
+        self.assertFalse(BUS.should_fail_on_unmatched(1, allow_unmatched_skip=False, dry_run=True))
+        self.assertFalse(BUS.should_fail_on_unmatched(1, allow_unmatched_skip=True, dry_run=False))
+        self.assertTrue(BUS.should_fail_on_unmatched(1, allow_unmatched_skip=False, dry_run=False))
+
+    def test_build_report_payload_includes_status(self) -> None:
+        payload = BUS.build_report_payload(
+            Path("/tmp/routes.csv"),
+            {"10": {"lowFloorVehicleCount": 1, "totalVehicleCount": 2}},
+            {"10": "5200000010"},
+            [
+                {
+                    "routeNo": "10",
+                    "routeId": "5200000010",
+                    "hasLowFloor": True,
+                    "lowFloorVehicleCount": 1,
+                    "totalVehicleCount": 2,
+                }
+            ],
+            source_row_count=2,
+            skipped_rows=0,
+            status="dry_run",
+            error=None,
+            unmatched_skip_applied=False,
+        )
+        self.assertEqual(payload["status"], "dry_run")
+        self.assertEqual(payload["matchedRouteCount"], 1)
+
+    def test_resolve_low_floor_table_layout_supports_camel_and_snake_case(self) -> None:
+        self.assertEqual(
+            BUS.resolve_low_floor_table_layout(["routeId", "routeNo", "hasLowFloor"]),
+            ("routeId", "routeNo", "hasLowFloor"),
+        )
+        self.assertEqual(
+            BUS.resolve_low_floor_table_layout(["route_id", "route_no", "has_low_floor"]),
+            ("route_id", "route_no", "has_low_floor"),
+        )
 
     def test_parse_place_row_raises_value_error_for_blank_name(self) -> None:
         with self.assertRaises(ValueError):
@@ -153,7 +282,7 @@ class ReferenceLoadTests(unittest.TestCase):
                 "body": {
                     "items": {
                         "item": [
-                            {"lineid": "5200000086", "buslinenum": "86", "lowplate": "1"},
+                            {"lineid": "5200000086", "buslinenum": "86", "bustype": "일반버스"},
                         ]
                     }
                 }

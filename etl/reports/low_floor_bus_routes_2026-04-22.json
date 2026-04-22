@@ -1,0 +1,1052 @@
+{
+  "bimsBusLineNumFormat": {
+    "contains_suffix_beon": false,
+    "sample": [
+      "10",
+      "100",
+      "100-1",
+      "1001",
+      "1002",
+      "1002(심야)",
+      "1003",
+      "1003(심야)",
+      "1004",
+      "1004(심야)"
+    ]
+  },
+  "bimsRouteCount": 290,
+  "distinctRouteCount": 146,
+  "error": null,
+  "matchedRouteCount": 146,
+  "routes": [
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 12,
+      "routeId": "5200010000",
+      "routeNo": "10",
+      "totalVehicleCount": 20
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 6,
+      "routeId": "5200100000",
+      "routeNo": "100",
+      "totalVehicleCount": 16
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 7,
+      "routeId": "5200100100",
+      "routeNo": "100-1",
+      "totalVehicleCount": 14
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5201001000",
+      "routeNo": "1001",
+      "totalVehicleCount": 31
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5201002000",
+      "routeNo": "1002",
+      "totalVehicleCount": 15
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5201003000",
+      "routeNo": "1003",
+      "totalVehicleCount": 27
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5201004000",
+      "routeNo": "1004",
+      "totalVehicleCount": 12
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 14,
+      "routeId": "5200101000",
+      "routeNo": "101",
+      "totalVehicleCount": 17
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 5,
+      "routeId": "5200103000",
+      "routeNo": "103",
+      "totalVehicleCount": 21
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 6,
+      "routeId": "5200105000",
+      "routeNo": "105",
+      "totalVehicleCount": 13
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 17,
+      "routeId": "5200106000",
+      "routeNo": "106",
+      "totalVehicleCount": 18
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 15,
+      "routeId": "5200107000",
+      "routeNo": "107",
+      "totalVehicleCount": 16
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 16,
+      "routeId": "5200108000",
+      "routeNo": "108",
+      "totalVehicleCount": 20
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5200109000",
+      "routeNo": "109",
+      "totalVehicleCount": 6
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 8,
+      "routeId": "5200011000",
+      "routeNo": "11",
+      "totalVehicleCount": 19
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 16,
+      "routeId": "5200110000",
+      "routeNo": "110",
+      "totalVehicleCount": 16
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 17,
+      "routeId": "5200110100",
+      "routeNo": "110-1",
+      "totalVehicleCount": 26
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 2,
+      "routeId": "5200111000",
+      "routeNo": "111",
+      "totalVehicleCount": 17
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 7,
+      "routeId": "5200111100",
+      "routeNo": "111-1",
+      "totalVehicleCount": 15
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 19,
+      "routeId": "5200113000",
+      "routeNo": "113",
+      "totalVehicleCount": 27
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 5,
+      "routeId": "5200115000",
+      "routeNo": "115",
+      "totalVehicleCount": 6
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 16,
+      "routeId": "5200115100",
+      "routeNo": "115-1",
+      "totalVehicleCount": 32
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5200121000",
+      "routeNo": "121",
+      "totalVehicleCount": 6
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5200122000",
+      "routeNo": "122",
+      "totalVehicleCount": 9
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 13,
+      "routeId": "5200123000",
+      "routeNo": "123",
+      "totalVehicleCount": 17
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 9,
+      "routeId": "5200124000",
+      "routeNo": "124",
+      "totalVehicleCount": 13
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 8,
+      "routeId": "5200126000",
+      "routeNo": "126",
+      "totalVehicleCount": 29
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 13,
+      "routeId": "5200127000",
+      "routeNo": "127",
+      "totalVehicleCount": 14
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 12,
+      "routeId": "5200128100",
+      "routeNo": "128-1",
+      "totalVehicleCount": 24
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 17,
+      "routeId": "5200129100",
+      "routeNo": "129-1",
+      "totalVehicleCount": 24
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 12,
+      "routeId": "5200131000",
+      "routeNo": "131",
+      "totalVehicleCount": 19
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 4,
+      "routeId": "5200133000",
+      "routeNo": "133",
+      "totalVehicleCount": 12
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 6,
+      "routeId": "5200133100",
+      "routeNo": "133-1",
+      "totalVehicleCount": 12
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 1,
+      "routeId": "5200134000",
+      "routeNo": "134",
+      "totalVehicleCount": 18
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 18,
+      "routeId": "5200138000",
+      "routeNo": "138",
+      "totalVehicleCount": 25
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 13,
+      "routeId": "5200138100",
+      "routeNo": "138-1",
+      "totalVehicleCount": 19
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 5,
+      "routeId": "5200139000",
+      "routeNo": "139",
+      "totalVehicleCount": 9
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 22,
+      "routeId": "5200141000",
+      "routeNo": "141",
+      "totalVehicleCount": 22
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 7,
+      "routeId": "5200144000",
+      "routeNo": "144",
+      "totalVehicleCount": 10
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 15,
+      "routeId": "5200148000",
+      "routeNo": "148",
+      "totalVehicleCount": 25
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 6,
+      "routeId": "5200015000",
+      "routeNo": "15",
+      "totalVehicleCount": 34
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 11,
+      "routeId": "5200155000",
+      "routeNo": "155",
+      "totalVehicleCount": 35
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 17,
+      "routeId": "5200016000",
+      "routeNo": "16",
+      "totalVehicleCount": 30
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 4,
+      "routeId": "5200160000",
+      "routeNo": "160",
+      "totalVehicleCount": 17
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 7,
+      "routeId": "5200161000",
+      "routeNo": "161",
+      "totalVehicleCount": 23
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 16,
+      "routeId": "5200167000",
+      "routeNo": "167",
+      "totalVehicleCount": 17
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 5,
+      "routeId": "5200168000",
+      "routeNo": "168",
+      "totalVehicleCount": 15
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 29,
+      "routeId": "5200169000",
+      "routeNo": "169",
+      "totalVehicleCount": 30
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 4,
+      "routeId": "5200169100",
+      "routeNo": "169-1",
+      "totalVehicleCount": 24
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 8,
+      "routeId": "5200017000",
+      "routeNo": "17",
+      "totalVehicleCount": 15
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 6,
+      "routeId": "5200171000",
+      "routeNo": "171",
+      "totalVehicleCount": 23
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 7,
+      "routeId": "5200172000",
+      "routeNo": "172",
+      "totalVehicleCount": 21
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 12,
+      "routeId": "5200179000",
+      "routeNo": "179",
+      "totalVehicleCount": 29
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5200180000",
+      "routeNo": "180",
+      "totalVehicleCount": 3
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 11,
+      "routeId": "5200181000",
+      "routeNo": "181",
+      "totalVehicleCount": 16
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5200182000",
+      "routeNo": "182",
+      "totalVehicleCount": 7
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 3,
+      "routeId": "5200183000",
+      "routeNo": "183",
+      "totalVehicleCount": 13
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 3,
+      "routeId": "5200184000",
+      "routeNo": "184",
+      "totalVehicleCount": 3
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 3,
+      "routeId": "5200185000",
+      "routeNo": "185",
+      "totalVehicleCount": 5
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 6,
+      "routeId": "5200186000",
+      "routeNo": "186",
+      "totalVehicleCount": 10
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 4,
+      "routeId": "5200187000",
+      "routeNo": "187",
+      "totalVehicleCount": 4
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 7,
+      "routeId": "5200188000",
+      "routeNo": "188",
+      "totalVehicleCount": 8
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 15,
+      "routeId": "5200189000",
+      "routeNo": "189",
+      "totalVehicleCount": 22
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 12,
+      "routeId": "5200189100",
+      "routeNo": "189-1",
+      "totalVehicleCount": 15
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5200190000",
+      "routeNo": "190",
+      "totalVehicleCount": 12
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 8,
+      "routeId": "5200002000",
+      "routeNo": "2",
+      "totalVehicleCount": 19
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 15,
+      "routeId": "5200020000",
+      "routeNo": "20",
+      "totalVehicleCount": 22
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5200200000",
+      "routeNo": "200",
+      "totalVehicleCount": 26
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 4,
+      "routeId": "5200210000",
+      "routeNo": "210",
+      "totalVehicleCount": 15
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 6,
+      "routeId": "5200022000",
+      "routeNo": "22",
+      "totalVehicleCount": 13
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5200023000",
+      "routeNo": "23",
+      "totalVehicleCount": 26
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 20,
+      "routeId": "5200024000",
+      "routeNo": "24",
+      "totalVehicleCount": 25
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 5,
+      "routeId": "5200026000",
+      "routeNo": "26",
+      "totalVehicleCount": 17
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 19,
+      "routeId": "5200027000",
+      "routeNo": "27",
+      "totalVehicleCount": 23
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 5,
+      "routeId": "5200029000",
+      "routeNo": "29",
+      "totalVehicleCount": 29
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5200003000",
+      "routeNo": "3",
+      "totalVehicleCount": 16
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 10,
+      "routeId": "5200030000",
+      "routeNo": "30",
+      "totalVehicleCount": 17
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 3,
+      "routeId": "5200300000",
+      "routeNo": "300",
+      "totalVehicleCount": 7
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5203001000",
+      "routeNo": "3001",
+      "totalVehicleCount": 14
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5203002000",
+      "routeNo": "3002",
+      "totalVehicleCount": 10
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5203003000",
+      "routeNo": "3003",
+      "totalVehicleCount": 6
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5203005000",
+      "routeNo": "3005",
+      "totalVehicleCount": 7
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5203006000",
+      "routeNo": "3006",
+      "totalVehicleCount": 14
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5203007000",
+      "routeNo": "3007",
+      "totalVehicleCount": 8
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5203008000",
+      "routeNo": "3008",
+      "totalVehicleCount": 17
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 1,
+      "routeId": "5200301000",
+      "routeNo": "301",
+      "totalVehicleCount": 3
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 4,
+      "routeId": "5200302000",
+      "routeNo": "302",
+      "totalVehicleCount": 4
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 13,
+      "routeId": "5200307000",
+      "routeNo": "307",
+      "totalVehicleCount": 14
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 34,
+      "routeId": "5200031000",
+      "routeNo": "31",
+      "totalVehicleCount": 37
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 16,
+      "routeId": "5200033000",
+      "routeNo": "33",
+      "totalVehicleCount": 26
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 9,
+      "routeId": "5200033100",
+      "routeNo": "33-1",
+      "totalVehicleCount": 16
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 3,
+      "routeId": "5200338000",
+      "routeNo": "338",
+      "totalVehicleCount": 20
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5200036000",
+      "routeNo": "36",
+      "totalVehicleCount": 13
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 6,
+      "routeId": "5200037000",
+      "routeNo": "37",
+      "totalVehicleCount": 10
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5200038000",
+      "routeNo": "38",
+      "totalVehicleCount": 11
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5200038100",
+      "routeNo": "38-1",
+      "totalVehicleCount": 1
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 20,
+      "routeId": "5200039000",
+      "routeNo": "39",
+      "totalVehicleCount": 21
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 13,
+      "routeId": "5200040000",
+      "routeNo": "40",
+      "totalVehicleCount": 25
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 21,
+      "routeId": "5200041000",
+      "routeNo": "41",
+      "totalVehicleCount": 22
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 7,
+      "routeId": "5200042000",
+      "routeNo": "42",
+      "totalVehicleCount": 19
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 11,
+      "routeId": "5200043000",
+      "routeNo": "43",
+      "totalVehicleCount": 20
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 6,
+      "routeId": "5200044000",
+      "routeNo": "44",
+      "totalVehicleCount": 25
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 4,
+      "routeId": "5200046000",
+      "routeNo": "46",
+      "totalVehicleCount": 12
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 16,
+      "routeId": "5200049000",
+      "routeNo": "49",
+      "totalVehicleCount": 23
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 11,
+      "routeId": "5200005100",
+      "routeNo": "5-1",
+      "totalVehicleCount": 17
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 15,
+      "routeId": "5200050000",
+      "routeNo": "50",
+      "totalVehicleCount": 15
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 8,
+      "routeId": "5200506000",
+      "routeNo": "506",
+      "totalVehicleCount": 9
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 13,
+      "routeId": "5200508000",
+      "routeNo": "508",
+      "totalVehicleCount": 13
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 23,
+      "routeId": "5200051000",
+      "routeNo": "51",
+      "totalVehicleCount": 36
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 18,
+      "routeId": "5200052000",
+      "routeNo": "52",
+      "totalVehicleCount": 25
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 4,
+      "routeId": "5200520000",
+      "routeNo": "520",
+      "totalVehicleCount": 4
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 20,
+      "routeId": "5200054000",
+      "routeNo": "54",
+      "totalVehicleCount": 27
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 5,
+      "routeId": "5200055000",
+      "routeNo": "55",
+      "totalVehicleCount": 7
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 16,
+      "routeId": "5200057000",
+      "routeNo": "57",
+      "totalVehicleCount": 22
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 4,
+      "routeId": "5200058000",
+      "routeNo": "58",
+      "totalVehicleCount": 4
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 3,
+      "routeId": "5200058100",
+      "routeNo": "58-1",
+      "totalVehicleCount": 7
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 10,
+      "routeId": "5200058200",
+      "routeNo": "58-2",
+      "totalVehicleCount": 18
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 3,
+      "routeId": "5200583000",
+      "routeNo": "583",
+      "totalVehicleCount": 6
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 9,
+      "routeId": "5200059000",
+      "routeNo": "59",
+      "totalVehicleCount": 21
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 13,
+      "routeId": "5200006000",
+      "routeNo": "6",
+      "totalVehicleCount": 19
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 12,
+      "routeId": "5200061000",
+      "routeNo": "61",
+      "totalVehicleCount": 14
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 23,
+      "routeId": "5200062000",
+      "routeNo": "62",
+      "totalVehicleCount": 27
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 10,
+      "routeId": "5200063000",
+      "routeNo": "63",
+      "totalVehicleCount": 27
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 20,
+      "routeId": "5200067000",
+      "routeNo": "67",
+      "totalVehicleCount": 31
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 18,
+      "routeId": "5200068000",
+      "routeNo": "68",
+      "totalVehicleCount": 38
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 2,
+      "routeId": "5200007000",
+      "routeNo": "7",
+      "totalVehicleCount": 9
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5200070000",
+      "routeNo": "70",
+      "totalVehicleCount": 10
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 3,
+      "routeId": "5200071000",
+      "routeNo": "71",
+      "totalVehicleCount": 8
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 3,
+      "routeId": "5200073000",
+      "routeNo": "73",
+      "totalVehicleCount": 3
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 20,
+      "routeId": "5200077000",
+      "routeNo": "77",
+      "totalVehicleCount": 21
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 16,
+      "routeId": "5200008000",
+      "routeNo": "8",
+      "totalVehicleCount": 21
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 16,
+      "routeId": "5200080000",
+      "routeNo": "80",
+      "totalVehicleCount": 30
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 21,
+      "routeId": "5200081000",
+      "routeNo": "81",
+      "totalVehicleCount": 30
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 8,
+      "routeId": "5200082000",
+      "routeNo": "82",
+      "totalVehicleCount": 21
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 14,
+      "routeId": "5200083000",
+      "routeNo": "83",
+      "totalVehicleCount": 17
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 9,
+      "routeId": "5200083100",
+      "routeNo": "83-1",
+      "totalVehicleCount": 10
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 12,
+      "routeId": "5200085000",
+      "routeNo": "85",
+      "totalVehicleCount": 13
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5200086000",
+      "routeNo": "86",
+      "totalVehicleCount": 19
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5200087000",
+      "routeNo": "87",
+      "totalVehicleCount": 32
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 3,
+      "routeId": "5200088000",
+      "routeNo": "88(A)",
+      "totalVehicleCount": 9
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5200088100",
+      "routeNo": "88-1A",
+      "totalVehicleCount": 11
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 8,
+      "routeId": "5200009000",
+      "routeNo": "9",
+      "totalVehicleCount": 8
+    },
+    {
+      "hasLowFloor": false,
+      "lowFloorVehicleCount": 0,
+      "routeId": "5200090000",
+      "routeNo": "90",
+      "totalVehicleCount": 3
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 18,
+      "routeId": "5200096000",
+      "routeNo": "96",
+      "totalVehicleCount": 26
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 1,
+      "routeId": "5200096100",
+      "routeNo": "96-1",
+      "totalVehicleCount": 4
+    },
+    {
+      "hasLowFloor": true,
+      "lowFloorVehicleCount": 12,
+      "routeId": "5200099000",
+      "routeNo": "99",
+      "totalVehicleCount": 24
+    }
+  ],
+  "sourceCsvEncoding": "cp949",
+  "sourceCsvPath": "etl/data/raw/부산광역시_시내버스 업체별 연도별 버스 등록대수_20260330.csv",
+  "sourceRowCount": 2511,
+  "sourceRowsSkipped": 0,
+  "status": "upserted",
+  "unmatchedRouteCount": 0,
+  "unmatchedSkipApplied": false
+}

@@ -250,7 +250,7 @@ then
   exit 1
 fi
 
-if [[ -f "$ROOT_DIR/.claude/settings.local.json" ]]; then
+if git -C "$ROOT_DIR" ls-files --error-unmatch ".claude/settings.local.json" >/dev/null 2>&1; then
   echo ".claude/settings.local.json should remain local-only and not be committed" >&2
   exit 1
 fi

@@ -2,7 +2,7 @@
 
 ## Goal
 
-최신 `docs/prd.md`, `docs/기능명세서.md`, `docs/erd.md`와 현재 저장소 상태만으로 부산이음길 MVP POC를 구현 가능한 수준의 실행 계획으로 정리한다. 이번 스프린트는 `docs/plans/` 없이도 진행 가능해야 하며, `busan.osm.pbf`를 먼저 DB에 적재하고 `etl/data/raw`의 CSV와 BIMS API를 통해 접근성·시설·대중교통 참조 데이터를 보강한 뒤, 그 결과를 GraphHopper와 Spring Boot API에 연결하는 순서로 진행한다.
+최신 `docs/prd.md`, `docs/기능명세서.md`, `docs/erd.md`와 현재 저장소 상태만으로 부산이음길 MVP POC를 구현 가능한 수준의 실행 계획으로 정리한다. 이번 스프린트는 `docs/plans/` 없이도 진행 가능해야 하며, 기존 `busan.osm.pbf` 선적재 대신 국토교통부 SHP 도로 중심선을 기준 네트워크로 재정의한 뒤 `etl/data/raw`의 CSV와 BIMS API를 통해 접근성·시설·대중교통 참조 데이터를 보강하고, 그 결과를 GraphHopper와 Spring Boot API에 연결하는 순서로 진행한다.
 
 ## Request Mode
 
@@ -31,7 +31,10 @@
 - Current environment and code:
   - `.env`
   - `poc/`
-  - `etl/data/raw/busan.osm.pbf`
+  - `etl/data/raw/N3L_A0020000_26.shp`
+  - `etl/data/raw/N3L_A0020000_26.shx`
+  - `etl/data/raw/N3L_A0020000_26.dbf`
+  - `etl/data/raw/N3L_A0020000_26.prj`
   - `etl/data/raw/place_merged_broad_category_final.csv`
   - `etl/data/raw/place_accessibility_features_merged_final.csv`
   - `etl/data/raw/stg_audio_signals_ready.csv`
@@ -64,22 +67,23 @@
 
 - [ ] [01-setup-and-repo-alignment.md](.ai/PLANS/current-sprint/01-setup-and-repo-alignment.md)
 - [x] [01-setup-and-repo-alignment.md](.ai/PLANS/current-sprint/01-setup-and-repo-alignment.md)
-- [x] [02-osm-schema-and-network-load.md](.ai/PLANS/current-sprint/02-osm-schema-and-network-load.md)
-- [!] [03-csv-etl-and-reference-data.md](.ai/PLANS/current-sprint/03-csv-etl-and-reference-data.md)
+- [~] [02-osm-schema-and-network-load.md](.ai/PLANS/current-sprint/02-osm-schema-and-network-load.md)
+- [~] [03-csv-etl-and-reference-data.md](.ai/PLANS/current-sprint/03-csv-etl-and-reference-data.md)
 - [ ] [04-graphhopper-routing-profiles.md](.ai/PLANS/current-sprint/04-graphhopper-routing-profiles.md)
 - [ ] [05-backend-api-and-orchestration.md](.ai/PLANS/current-sprint/05-backend-api-and-orchestration.md)
 - [ ] [06-validation-demo-and-v2-boundary.md](.ai/PLANS/current-sprint/06-validation-demo-and-v2-boundary.md)
 
-Validation note on 2026-04-22: `01_osm_load.py --parse-only` now completes through a child-process snapshot flow without lingering Python workers, and `--load-snapshot --truncate` loads cleanly. `road_segments` now uses the 4-column natural key `(sourceWayId, sourceOsmFromNodeId, sourceOsmToNodeId, segmentOrdinal)`, and the full snapshot loads as `115,080` segments with `0` invalid geometries and `0` duplicate natural-key rows.
+Validation note on 2026-04-23: the previous OSM snapshot validation remains available only as legacy evidence. Workstream `02` has been reopened because the canonical network source is shifting from `busan.osm.pbf` to `N3L_A0020000_26` SHP, which requires a source-agnostic schema and a new `edgeId` handoff contract.
 
-Validation note on 2026-04-22: Workstream `03` reran all CSV loaders plus `06_bims_bus_load.py` successfully after changing the BIMS fetch path to a single `busInfo` request. The hang is resolved, but `03` stays blocked because the current BIMS payload does not expose a reliable low-floor indicator; `low_floor_bus_routes` loaded `290` rows with `0` rows where `hasLowFloor = true`.
+Validation note on 2026-04-22: Workstream `03` was reloaded on a fresh canonical `schema.sql` database after retiring the legacy snake_case Postgres target on `localhost:5432`. The current canonical counts are `places=13,564`, `place_accessibility_features=42,368`, `segment_features=120,357`, `subway_station_elevators=203`, and `low_floor_bus_routes=146` with `118` rows where `hasLowFloor = true`.
+Validation note on 2026-04-22: Workstream `03` now also enriches `road_segments.elevatorState` from `subway_station_elevators`, producing `102` `SUBWAY_ELEVATOR` features and `86` segments tagged `elevatorState=YES`. The workstream remains in progress because the documented `15m~30m` segment tie-break rule and audio `NO` propagation are still not implemented.
 
-Implementation guard for real service: all downstream ETL, GraphHopper import, and verification flows must use the same 4-column segment identity `(sourceWayId, sourceOsmFromNodeId, sourceOsmToNodeId, segmentOrdinal)`, and OSM loading must stay split as `preflight -> parse-only snapshot -> load-snapshot` so schema drift or parser teardown issues fail before long-running load work is wasted.
+Implementation guard for real service: all downstream ETL, GraphHopper import, and verification flows must use the same canonical `edgeId` handoff contract, and the network load stage must stay split as `preflight -> extract -> topology-audit -> load-db` so schema drift or graph connectivity defects fail before long-running downstream work is wasted.
 
 ## Ordered Delivery Plan
 
 1. `01`에서 저장소 구조, DB 선택, 실행 경로를 고정한다.
-2. `02`에서 PostGIS 스키마를 만들고 `busan.osm.pbf`를 `road_nodes`, `road_segments`에 적재한다.
+2. `02`에서 PostGIS 스키마를 source-agnostic 형태로 바꾸고 `N3L_A0020000_26` SHP를 `road_nodes`, `road_segments`에 적재한다.
 3. `03`에서 CSV와 BIMS API로 `places`, `place_accessibility_features`, `road_segments`, `segment_features`, `subway_station_elevators`, `low_floor_bus_routes`를 보강 적재한다.
 4. `04`에서 GraphHopper import, custom encoded values, 4개 custom model과 분기 로직을 구현한다.
 5. `05`에서 Spring Boot API와 대중교통 오케스트레이션을 붙인다.
@@ -102,7 +106,7 @@ Implementation guard for real service: all downstream ETL, GraphHopper import, a
 ## Build
 
 - [ ] DB 스키마와 OSM 적재기를 구현한다.
-- [ ] CSV/BIMS ETL을 구현한다.
+- [~] CSV/BIMS ETL을 구현한다.
 - [ ] GraphHopper 플러그인과 custom model을 구현한다.
 - [ ] Spring Boot API와 검증용 UI 또는 시연 흐름을 구현한다.
 
