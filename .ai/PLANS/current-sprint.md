@@ -70,6 +70,7 @@
 - [~] [02-osm-schema-and-network-load.md](.ai/PLANS/current-sprint/02-osm-schema-and-network-load.md)
 - [~] [03-csv-etl-and-reference-data.md](.ai/PLANS/current-sprint/03-csv-etl-and-reference-data.md)
 - [ ] [04-graphhopper-routing-profiles.md](.ai/PLANS/current-sprint/04-graphhopper-routing-profiles.md)
+- [ ] [04-graphhopper-routing-profiles_v2.md](.ai/PLANS/current-sprint/04-graphhopper-routing-profiles_v2.md)
 - [ ] [05-backend-api-and-orchestration.md](.ai/PLANS/current-sprint/05-backend-api-and-orchestration.md)
 - [ ] [06-validation-demo-and-v2-boundary.md](.ai/PLANS/current-sprint/06-validation-demo-and-v2-boundary.md)
 
@@ -86,6 +87,7 @@ Implementation guard for real service: all downstream ETL, GraphHopper import, a
 2. `02`에서 PostGIS 스키마를 source-agnostic 형태로 바꾸고 `N3L_A0020000_26` SHP를 `road_nodes`, `road_segments`에 적재한다.
 3. `03`에서 CSV와 BIMS API로 `places`, `place_accessibility_features`, `road_segments`, `segment_features`, `subway_station_elevators`, `low_floor_bus_routes`를 보강 적재한다.
 4. `04`에서 GraphHopper import, custom encoded values, 4개 custom model과 분기 로직을 구현한다.
+   - 대안 경로: `04-graphhopper-routing-profiles_v2.md`는 `road_segments direct graph import` 기반 재설계안이다.
 5. `05`에서 Spring Boot API와 대중교통 오케스트레이션을 붙인다.
 6. `06`에서 POC 검증 흐름, smoke, 시연 범위와 V2 경계를 정리한다.
 
